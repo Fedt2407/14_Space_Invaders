@@ -38,7 +38,7 @@ class Explosion:
 class Missile:
     def __init__(self, x, y, speed=5, cell_size=3):
         self.x = x
-        self.y = y
+        self.y = y + 50
         self.speed = speed
         self.cell_size = cell_size
         self.color = (0, 255, 0)
