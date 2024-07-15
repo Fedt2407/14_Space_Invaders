@@ -1,6 +1,6 @@
 import pygame
 import random
-from aliens import Alien
+from aliens import Octopus, Crab
 from spaceship import Spaceship
 
 # Initialization of Pygame
@@ -19,15 +19,21 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 
 # Variables for the spaceship
-spaceship = Spaceship(window_width // 2 - 30, window_height - 100)
+spaceship = Spaceship(window_width // 2 - 30, window_height - 60)
 
 # Create initial aliens
 aliens = []
-for i in range(5):
+for i in range(10):
     # x = random.randint(0, window_width - 200)
     x = 65 * i
     y = 5
-    aliens.append(Alien(x, y))
+    aliens.append(Crab(x, y))
+
+for i in range(10):
+    # x = random.randint(0, window_width - 200)
+    x = 65 * i
+    y = 65
+    aliens.append(Octopus(x, y))
 
 def draw_spaceship(x, y):
     pygame.draw.rect(window, white, (x, y, spaceship.width, spaceship.height))
