@@ -1,20 +1,22 @@
 import pygame
 
 class Spaceship:
-    def __init__(self, x, y, cell_size=11):
+    def __init__(self, x, y, cell_size=5):
         self.x = x
         self.y = y
         self.cell_size = cell_size
-        self.color = (0, 255, 0)
+        self.color = (0, 0, 255)
         
-        # Grid-based shape of the alien
+        # Grid-based shape of the spaceship
         self.shape = [
-            [0, 0, 0, 0, 1, 0, 0, 0, 0],
-            [0, 0, 0, 1, 1, 1, 0, 0, 0],
-            [0, 0, 1, 1, 0, 1, 1, 0, 0],
-            [1, 1, 1, 0, 0, 0, 1, 1, 1],
-            [0, 1, 1, 1, 1, 1, 1, 1, 0],
-            [0, 0, 0, 1, 0, 1, 0, 0, 0]
+            [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+            [1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+            [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
+            [0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0],
+            [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
         ]
 
         self.width = len(self.shape[0]) * self.cell_size

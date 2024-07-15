@@ -7,8 +7,8 @@ from spaceship import Spaceship
 pygame.init()
 
 # Window dimensions
-window_width = 1800
-window_height = 1000
+window_width = 1000
+window_height = 600
 
 # Create the game window
 window = pygame.display.set_mode((window_width, window_height))
@@ -23,9 +23,10 @@ spaceship = Spaceship(window_width // 2 - 30, window_height - 100)
 
 # Create initial aliens
 aliens = []
-for i in range(1):
-    x = random.randint(0, window_width - 50)
-    y = random.randint(50, 150)
+for i in range(5):
+    # x = random.randint(0, window_width - 200)
+    x = 65 * i
+    y = 5
     aliens.append(Alien(x, y))
 
 def draw_spaceship(x, y):

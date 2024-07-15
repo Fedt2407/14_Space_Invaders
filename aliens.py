@@ -1,11 +1,11 @@
 import pygame
 
 class Alien:
-    def __init__(self, x, y, cell_size=11):
+    def __init__(self, x, y, cell_size=5):
         self.x = x
         self.y = y
         self.cell_size = cell_size
-        self.color = (0, 255, 0)
+        self.color = (167, 7, 255)
         
         # Grid-based shape of the alien
         self.shape = [
@@ -36,5 +36,5 @@ class Alien:
         self.x += self.speed
         if self.x <= 0 or self.x >= window_width - self.width:
             self.speed *= -1
-            self.y += self.cell_size * 2
+            self.y += self.cell_size * 11
         self.rect.topleft = (self.x, self.y)
