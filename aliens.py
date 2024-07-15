@@ -71,17 +71,49 @@ class Missile:
             self.rect.topleft = (self.x, self.y)
 
 
-class Octopus:
-    def __init__(self, x, y, cell_size=5):
+class Alien:
+    def __init__(self, x, y, cell_size, color, shape):
         self.x = x
         self.y = y
         self.cell_size = cell_size
-        self.color = (167, 7, 255)
+        self.color = color
         self.active = True
         self.missiles = []
-        
-        # Grid-based shape of the alien
-        self.shape = [
+
+        self.shape = shape
+
+        self.width = len(self.shape[0]) * self.cell_size
+        self.height = len(self.shape) * self.cell_size
+        self.rect = pygame.Rect(x, y, self.width, self.height)
+        self.speed = 1
+
+    def draw(self, window):
+        for i, row in enumerate(self.shape):
+            for j, cell in enumerate(row):
+                if cell:
+                    pygame.draw.rect(window, self.color, (self.x + j * self.cell_size, self.y + i * self.cell_size, self.cell_size, self.cell_size))
+
+    def update(self, window_width):
+        self.x += self.speed
+        if self.x <= 0 or self.x >= window_width - self.width:
+            self.speed *= -1
+            self.y += self.cell_size * 24
+        self.rect.topleft = (self.x, self.y)
+
+    def hit(self):
+        self.explosion = Explosion(self.x, self.y)
+        self.active = False
+        return self.explosion
+
+    def shoot(self):
+        if self.active:
+            self.missiles.append(Missile(self.x + self.width // 2, self.y, speed=5))
+            return self.missiles[-1]
+
+
+class Octopus(Alien):
+    def __init__(self, x, y):
+        shape = [
             [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
             [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0],
             [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0],
@@ -93,48 +125,12 @@ class Octopus:
             [1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1],
             [1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1]
         ]
-
-        self.width = len(self.shape[0]) * self.cell_size
-        self.height = len(self.shape) * self.cell_size
-        self.rect = pygame.Rect(x, y, self.width, self.height)
-        self.speed = 1
-
-    def draw(self, window):
-        for i, row in enumerate(self.shape):
-            for j, cell in enumerate(row):
-                if cell:
-                    pygame.draw.rect(window, self.color, (self.x + j * self.cell_size, self.y + i * self.cell_size, self.cell_size, self.cell_size))
-
-    def update(self, window_width):
-        self.x += self.speed
-        if self.x <= 0 or self.x >= window_width - self.width:
-            self.speed *= -1
-            self.y += self.cell_size * 24
-        self.rect.topleft = (self.x, self.y)
-
-    def hit(self):
-        self.explosion = Explosion(self.x, self.y)
-        self.active = False
-        return self.explosion
+        super().__init__(x, y, 5, (167, 7, 255), shape)
 
 
-    def shoot(self):
-        if self.active:
-            self.missiles.append(Missile(self.x + self.width // 2, self.y, speed=5))
-            return self.missiles[-1]
-
-
-class Crab:
-    def __init__(self, x, y, cell_size=5):
-        self.x = x
-        self.y = y
-        self.cell_size = cell_size
-        self.color = (255, 0, 0)
-        self.active = True
-        self.missiles = []
-        
-        # Grid-based shape of the alien
-        self.shape = [
+class Crab(Alien):
+    def __init__(self, x, y):
+        shape = [
             [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
             [0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0],
             [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
@@ -146,33 +142,4 @@ class Crab:
             [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1]
         ]
-
-        self.width = len(self.shape[0]) * self.cell_size
-        self.height = len(self.shape) * self.cell_size
-        self.rect = pygame.Rect(x, y, self.width, self.height)
-        self.speed = 1
-
-    def draw(self, window):
-        for i, row in enumerate(self.shape):
-            for j, cell in enumerate(row):
-                if cell:
-                    pygame.draw.rect(window, self.color, (self.x + j * self.cell_size, self.y + i * self.cell_size, self.cell_size, self.cell_size))
-
-    def update(self, window_width):
-        self.x += self.speed
-        if self.x <= 0 or self.x >= window_width - self.width:
-            self.speed *= -1
-            self.y += self.cell_size * 24
-        self.rect.topleft = (self.x, self.y)
-
-
-    def hit(self):
-        self.explosion = Explosion(self.x, self.y)
-        self.active = False
-        return self.explosion
-    
-
-    def shoot(self):
-        if self.active:
-            self.missiles.append(Missile(self.x + self.width // 2, self.y, speed=5))
-            return self.missiles[-1]
+        super().__init__(x, y, 5, (255, 0, 0), shape)

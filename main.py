@@ -26,12 +26,12 @@ scoreboard = Scoreboard()
 
 # Create initial aliens
 aliens = []
-for i in range(10):
+for i in range(15):
     x = 65 * i
     y = 5
     aliens.append(Crab(x, y))
 
-for i in range(10):
+for i in range(15):
     x = 65 * i
     y = 65
     aliens.append(Octopus(x, y))
@@ -39,7 +39,7 @@ for i in range(10):
 # Initialize other variables
 alien_missiles = []
 explosions = []
-alien_shoot_interval = 2  # Intervalo di sparo in secondi
+alien_shoot_interval = 1  # Intervalo di sparo in secondi
 last_alien_shoot_time = time.time()
 
 # Game loop
