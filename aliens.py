@@ -1,12 +1,48 @@
 import pygame
 
 
+class Explosion:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.duration = 10
+        self.frame = 0
+        self.active = True
+
+        self.frames = [
+            [1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+            [0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0],
+            [0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0],
+            [1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+            [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0],
+            [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+            [0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+            [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0],
+            [0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0],
+            [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1]
+        ]
+
+    def draw(self, window):
+        if self.active:
+            for i, row in enumerate(self.frames):
+                for j, cell in enumerate(row):
+                    if cell:
+                        pygame.draw.rect(window, (255, 165, 0), (self.x + j * 5, self.y + i * 5, 5, 5))
+
+    def update(self):
+        if self.frame < self.duration:
+            self.frame += 1
+        else:
+            self.active = False  # Termina l'esplosione dopo il numero di frame
+
+
 class Octopus:
     def __init__(self, x, y, cell_size=5):
         self.x = x
         self.y = y
         self.cell_size = cell_size
         self.color = (167, 7, 255)
+        self.active = True
         
         # Grid-based shape of the alien
         self.shape = [
@@ -40,6 +76,11 @@ class Octopus:
             self.y += self.cell_size * 24
         self.rect.topleft = (self.x, self.y)
 
+    def hit(self):
+        self.explosion = Explosion(self.x, self.y)
+        self.active = False
+        return self.explosion
+
 
 class Crab:
     def __init__(self, x, y, cell_size=5):
@@ -47,6 +88,7 @@ class Crab:
         self.y = y
         self.cell_size = cell_size
         self.color = (255, 0, 0)
+        self.active = True
         
         # Grid-based shape of the alien
         self.shape = [
@@ -79,3 +121,9 @@ class Crab:
             self.speed *= -1
             self.y += self.cell_size * 24
         self.rect.topleft = (self.x, self.y)
+
+
+    def hit(self):
+        self.explosion = Explosion(self.x, self.y)
+        self.active = False
+        return self.explosion
