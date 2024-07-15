@@ -58,7 +58,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # Movimenti della navicella spaziale
+    # Movement of the spaceship
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and spaceship.x > 0:
         spaceship.x -= spaceship.speed
@@ -67,7 +67,7 @@ while running:
     if keys[pygame.K_SPACE]:
         spaceship.shoot()
 
-    # Sparare missili dagli alieni ogni 2 secondi
+    # Shoot alien missiles
     current_time = time.time()
     if current_time - last_alien_shoot_time > alien_shoot_interval:
         active_aliens = [alien for alien in aliens if alien.active]
@@ -77,7 +77,7 @@ while running:
             alien_missiles.append(missile)
         last_alien_shoot_time = current_time
 
-    # Aggiorna e disegna gli alieni
+    # Update and draw aliens
     for alien in aliens:
         alien.update(window_width)
         alien.draw(window)
@@ -89,12 +89,12 @@ while running:
         if not missile.active:
             alien_missiles.remove(missile)
 
-    # Aggiorna e disegna i missili della navicella
+    # Update and draw spaceship missiles
     for missile in spaceship.missiles[:]:
         missile.update()
         missile.draw(window)
 
-        # Controlla collisioni con gli alieni
+        # Check for collisions with aliens
         for alien in aliens[:]:
             if missile.rect.colliderect(alien.rect):
                 explosion = alien.hit()  # Chiama il metodo hit e ottieni l'esplosione
@@ -103,20 +103,20 @@ while running:
                     explosions.append(explosion)  # Aggiungi l'esplosione alla lista
                 missile.active = False  # Disattiva il missile
 
-    # Aggiorna e disegna le esplosioni
+    # Update and draw explosions
     for explosion in explosions[:]:
-        explosion.update()  # Aggiorna l'esplosione
-        explosion.draw(window)  # Disegna l'esplosione
+        explosion.update()  # Update the explosion
+        explosion.draw(window)  # Draw the explosion
         if not explosion.active:
-            explosions.remove(explosion)  # Rimuovi l'esplosione inattiva
+            explosions.remove(explosion)  # Remove the explosion if it's not active
 
-    # Rimuovi alieni inattivi
+    # Remove inactive aliens
     aliens = [alien for alien in aliens if alien.active]
 
-    # Rimuovi missili inattivi
+    # Remove inactive spaceship missiles
     spaceship.missiles = [missile for missile in spaceship.missiles if missile.active]
 
-    # Disegna la navicella spaziale
+    # Draw the spaceship and the scoreboard
     spaceship.draw(window)
     scoreboard.draw(window)
 

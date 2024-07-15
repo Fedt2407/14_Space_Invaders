@@ -32,7 +32,7 @@ class Explosion:
         if self.frame < self.duration:
             self.frame += 1
         else:
-            self.active = False  # Termina l'esplosione dopo il numero di frame
+            self.active = False  # Terminates the explosion
 
 
 class Missile:
