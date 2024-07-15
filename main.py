@@ -1,6 +1,7 @@
 import pygame
 from aliens import Octopus, Crab
 from spaceship import Spaceship
+from scoreboard import Scoreboard
 
 # Initialization of Pygame
 pygame.init()
@@ -18,7 +19,8 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 
 # Initialize spaceship
-spaceship = Spaceship(window_width // 2 - 30, window_height - 60)
+spaceship = Spaceship(window_width // 2 - 30, window_height - 80)
+scoreboard = Scoreboard()
 
 # Create initial aliens
 aliens = []
@@ -67,6 +69,7 @@ while running:
         for alien in aliens:
             if missile.rect.colliderect(alien.rect):
                 explosion = alien.hit()  # Chiama il metodo hit e ottieni l'esplosione
+                scoreboard.increase_score(10)  # Aumenta il punteggio
                 if explosion:
                     explosions.append(explosion)  # Aggiungi l'esplosione alla lista
                 missile.active = False  # Disattiva il missile
@@ -86,6 +89,7 @@ while running:
 
     # Disegna la navicella spaziale
     spaceship.draw(window)
+    scoreboard.draw(window)
 
     pygame.display.update()
     clock.tick(60)
