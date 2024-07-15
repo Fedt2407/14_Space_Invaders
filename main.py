@@ -1,23 +1,23 @@
 import pygame
 import random
 
-# Initialization of Pygame
+# Pygame initialization
 pygame.init()
 
-# Window dimensions
+# Game window dimensions
 window_width = 800
 window_height = 600
 
-# Create the game window
+# Creating the game window
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Space Invaders")
 
 # Colors
 black = (0, 0, 0)
 white = (255, 255, 255)
+green = (0, 255, 0)
 
 # Variables for the spaceship
-spaceship_image = pygame.image.load("spaceship.png")
 spaceship_width = 64
 spaceship_height = 64
 spaceship_x = window_width // 2 - spaceship_width // 2
@@ -25,20 +25,24 @@ spaceship_y = window_height - spaceship_height - 10
 spaceship_speed = 5
 
 # Variables for the aliens
-alien_image = pygame.image.load("alien.png")
-alien_width = 64
-alien_height = 64
-alien_x = random.randint(0, window_width - alien_width)
-alien_y = random.randint(50, 150)
+alien_width = 50
+alien_height = 50
 alien_speed = 2
+aliens = []
+
+# Create aliens
+for i in range(5):
+    x = random.randint(0, window_width - alien_width)
+    y = random.randint(50, 150)
+    aliens.append(pygame.Rect(x, y, alien_width, alien_height))
 
 def draw_spaceship(x, y):
-    window.blit(spaceship_image, (x, y))
+    pygame.draw.rect(window, white, (x, y, spaceship_width, spaceship_height))
 
-def draw_alien(x, y):
-    window.blit(alien_image, (x, y))
+def draw_alien(alien):
+    pygame.draw.rect(window, green, alien)
 
-# Game loop
+# Game cycle
 running = True
 while running:
     window.fill(black)
@@ -47,23 +51,30 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # Spaceship movement
+    # Movement of the spaceship
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and spaceship_x > 0:
         spaceship_x -= spaceship_speed
     if keys[pygame.K_RIGHT] and spaceship_x < window_width - spaceship_width:
         spaceship_x += spaceship_speed
 
-    # Alien movement
-    alien_x += alien_speed
-    if alien_x <= 0 or alien_x >= window_width - alien_width:
-        alien_speed *= -1
-        alien_y += 50
+    # Movement of the aliens
+    for alien in aliens:
+        alien.x += alien_speed
+        if alien.x <= 0 or alien.x >= window_width - alien_width:
+            alien_speed *= -1
+            for a in aliens:
+                a.y += alien_height // 2
 
+    # Draw the spaceship
     draw_spaceship(spaceship_x, spaceship_y)
-    draw_alien(alien_x, alien_y)
+
+    # Disegna gli alieni
+    for alien in aliens:
+        draw_alien(alien)
 
     pygame.display.update()
 
 # Close the game
 pygame.quit()
+
