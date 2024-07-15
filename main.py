@@ -1,7 +1,9 @@
 import pygame
+import time
 from aliens import Octopus, Crab
 from spaceship import Spaceship
 from scoreboard import Scoreboard
+import random
 
 # Initialization of Pygame
 pygame.init()
@@ -12,7 +14,7 @@ window_height = 600
 
 # Create the game window
 window = pygame.display.set_mode((window_width, window_height))
-pygame.display.set_caption("Space Invaders")
+pygame.display.set_caption("Space Invaders Reforged by Fxx1")
 
 # Colors
 black = (0, 0, 0)
@@ -34,10 +36,15 @@ for i in range(10):
     y = 65
     aliens.append(Octopus(x, y))
 
+# Initialize other variables
+alien_missiles = []
+explosions = []
+alien_shoot_interval = 2  # Intervalo di sparo in secondi
+last_alien_shoot_time = time.time()
+
 # Game loop
 running = True
 clock = pygame.time.Clock()
-explosions = []  # Lista per memorizzare le esplosioni
 
 while running:
     window.fill(black)
@@ -55,18 +62,35 @@ while running:
     if keys[pygame.K_SPACE]:
         spaceship.shoot()
 
+    # Sparare missili dagli alieni ogni 2 secondi
+    current_time = time.time()
+    if current_time - last_alien_shoot_time > alien_shoot_interval:
+        active_aliens = [alien for alien in aliens if alien.active]
+        if active_aliens:
+            random_alien = random.choice(active_aliens)
+            missile = random_alien.shoot()
+            alien_missiles.append(missile)
+        last_alien_shoot_time = current_time
+
     # Aggiorna e disegna gli alieni
     for alien in aliens:
         alien.update(window_width)
         alien.draw(window)
 
-    # Aggiorna e disegna i missili
-    for missile in spaceship.missiles:
+    # Aggiorna e disegna i missili degli alieni
+    for missile in alien_missiles[:]:
+        missile.update()
+        missile.draw(window)
+        if not missile.active:
+            alien_missiles.remove(missile)
+
+    # Aggiorna e disegna i missili della navicella
+    for missile in spaceship.missiles[:]:
         missile.update()
         missile.draw(window)
 
         # Controlla collisioni con gli alieni
-        for alien in aliens:
+        for alien in aliens[:]:
             if missile.rect.colliderect(alien.rect):
                 explosion = alien.hit()  # Chiama il metodo hit e ottieni l'esplosione
                 scoreboard.increase_score(10)  # Aumenta il punteggio
@@ -75,7 +99,7 @@ while running:
                 missile.active = False  # Disattiva il missile
 
     # Aggiorna e disegna le esplosioni
-    for explosion in explosions:
+    for explosion in explosions[:]:
         explosion.update()  # Aggiorna l'esplosione
         explosion.draw(window)  # Disegna l'esplosione
         if not explosion.active:
