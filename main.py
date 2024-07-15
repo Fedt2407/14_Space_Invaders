@@ -1,6 +1,6 @@
 import pygame
 import time
-from aliens import Octopus, Crab
+from aliens import Octopus, Crab, Skull
 from spaceship import Spaceship
 from scoreboard import Scoreboard
 import random
@@ -29,12 +29,17 @@ aliens = []
 for i in range(15):
     x = 65 * i
     y = 5
-    aliens.append(Crab(x, y))
+    aliens.append(Skull(x, y))
 
 for i in range(15):
     x = 65 * i
-    y = 65
+    y = 52
     aliens.append(Octopus(x, y))
+
+for i in range(15):
+    x = 65 * i
+    y = 100
+    aliens.append(Crab(x, y))
 
 # Initialize other variables
 alien_missiles = []

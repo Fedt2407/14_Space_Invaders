@@ -41,7 +41,7 @@ class Missile:
         self.y = y + 50
         self.speed = speed
         self.cell_size = cell_size
-        self.color = (0, 255, 0)
+        self.color = (255, 255, 255)
         self.active = True
 
         # Grid-based shape of the missile
@@ -97,7 +97,7 @@ class Alien:
         self.x += self.speed
         if self.x <= 0 or self.x >= window_width - self.width:
             self.speed *= -1
-            self.y += self.cell_size * 24
+            self.y += self.cell_size * 36
         self.rect.topleft = (self.x, self.y)
 
     def hit(self):
@@ -125,7 +125,7 @@ class Octopus(Alien):
             [1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1],
             [1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1]
         ]
-        super().__init__(x, y, 5, (167, 7, 255), shape)
+        super().__init__(x, y, 4, (167, 7, 255), shape)
 
 
 class Crab(Alien):
@@ -142,4 +142,21 @@ class Crab(Alien):
             [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1]
         ]
-        super().__init__(x, y, 5, (255, 0, 0), shape)
+        super().__init__(x, y, 4, (255, 0, 0), shape)
+
+
+class Skull(Alien):
+    def __init__(self, x, y):
+        shape = [
+            [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+            [0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
+            [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0],
+            [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+            [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            [1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+            [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+            [0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0],
+            [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0]
+        ]
+        super().__init__(x, y, 4, (0, 255, 0), shape)
