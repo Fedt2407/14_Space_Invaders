@@ -94,6 +94,10 @@ while running:
             scoreboard.decrease_lives()
             spaceship.active = False  # Make the spaceship disappear
             missile.active = False  # Deactivate the missile that hit the spaceship
+            # Check if the game is over
+            if scoreboard.lives == 0:
+                scoreboard.game_over(window)
+                spaceship.active = False
 
     # Update and draw spaceship missiles
     for missile in spaceship.missiles[:]:
