@@ -44,6 +44,7 @@ for i in range(15):
 # Initialize other variables
 alien_missiles = []
 explosions = []
+ship_explosions = []
 alien_shoot_interval = 1  # Intervalo di sparo in secondi
 last_alien_shoot_time = time.time()
 
@@ -82,12 +83,21 @@ while running:
         alien.update(window_width)
         alien.draw(window)
 
-    # Aggiorna e disegna i missili degli alieni
+    # Update and draw alien missiles
     for missile in alien_missiles[:]:
         missile.update()
         missile.draw(window)
         if not missile.active:
             alien_missiles.remove(missile)
+        if missile.rect.colliderect(spaceship.rect):
+            ship_explosions.append(spaceship.hit())
+
+    # Update and draw spaceship explosions
+    for explosion in ship_explosions[:]:
+        explosion.update()  # Aggiorna l'esplosione
+        explosion.draw(window)  # Disegna l'esplosione
+        if not explosion.active:
+            ship_explosions.remove(explosion)  # Rimuovi l'esplosione inattiva
 
     # Update and draw spaceship missiles
     for missile in spaceship.missiles[:]:
@@ -97,11 +107,11 @@ while running:
         # Check for collisions with aliens
         for alien in aliens[:]:
             if missile.rect.colliderect(alien.rect):
-                explosion = alien.hit()  # Chiama il metodo hit e ottieni l'esplosione
-                scoreboard.increase_score(10)  # Aumenta il punteggio
+                explosion = alien.hit()  # Called when a missile hits an alien
+                scoreboard.increase_score(10)  # Increase the score by 10
                 if explosion:
-                    explosions.append(explosion)  # Aggiungi l'esplosione alla lista
-                missile.active = False  # Disattiva il missile
+                    explosions.append(explosion)  # Add the explosion to the list of explosions
+                missile.active = False  # Deactivate the missile
 
     # Update and draw explosions
     for explosion in explosions[:]:

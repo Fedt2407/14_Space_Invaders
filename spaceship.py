@@ -42,6 +42,42 @@ class Missile:
                 self.active = False
             self.rect.topleft = (self.x, self.y)
 
+
+class Explosion:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.duration = 10
+        self.frame = 0
+        self.active = True
+
+        self.frames = [
+            [1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+            [0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0],
+            [0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0],
+            [1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+            [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0],
+            [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+            [0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+            [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0],
+            [0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0],
+            [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1]
+        ]
+
+    def draw(self, window):
+        if self.active:
+            for i, row in enumerate(self.frames):
+                for j, cell in enumerate(row):
+                    if cell:
+                        pygame.draw.rect(window, (255, 165, 0), (self.x + j * 5, self.y + i * 5, 5, 5))
+
+    def update(self):
+        if self.frame < self.duration:
+            self.frame += 1
+        else:
+            self.active = False  # Terminates the explosion
+
+
 class Spaceship:
     def __init__(self, x, y, cell_size=5):
         self.x = x
@@ -95,4 +131,8 @@ class Spaceship:
             missile = Missile(missile_x, missile_y)
             self.missiles.append(missile)
             self.last_shot_time = current_time  # Update the last shot time
+
+    def hit(self):
+        self.explosion = Explosion(self.x, self.y)
+        return self.explosion
     
