@@ -65,7 +65,7 @@ while running:
         spaceship.x -= spaceship.speed
     if keys[pygame.K_RIGHT] and spaceship.x < window_width - spaceship.width:
         spaceship.x += spaceship.speed
-    if keys[pygame.K_SPACE]:
+    if keys[pygame.K_SPACE] and spaceship.active:
         spaceship.shoot()
 
     # Shoot alien missiles
@@ -89,15 +89,11 @@ while running:
         missile.draw(window)
         if not missile.active:
             alien_missiles.remove(missile)
-        if missile.rect.colliderect(spaceship.rect):
+        if missile.rect.colliderect(spaceship.rect) and spaceship.active:
             ship_explosions.append(spaceship.hit())
-
-    # Update and draw spaceship explosions
-    for explosion in ship_explosions[:]:
-        explosion.update()  # Aggiorna l'esplosione
-        explosion.draw(window)  # Disegna l'esplosione
-        if not explosion.active:
-            ship_explosions.remove(explosion)  # Rimuovi l'esplosione inattiva
+            scoreboard.decrease_lives()
+            spaceship.active = False  # Make the spaceship disappear
+            missile.active = False  # Deactivate the missile that hit the spaceship
 
     # Update and draw spaceship missiles
     for missile in spaceship.missiles[:]:
@@ -120,6 +116,18 @@ while running:
         if not explosion.active:
             explosions.remove(explosion)  # Remove the explosion if it's not active
 
+    # Update and draw spaceship explosions
+    for ship_explosion in ship_explosions[:]:
+        ship_explosion.update()  # Update the explosion
+        ship_explosion.draw(window)  # Draw the explosion
+        if not ship_explosion.active:
+            ship_explosions.remove(ship_explosion)  # Remove the explosion if it's not active
+
+    # Check if spaceship should reappear
+    if not spaceship.active and scoreboard.lives > 0:
+        time.sleep(1)  # Wait for 1 second before respawning
+        spaceship = Spaceship(window_width // 2 - 30, window_height - 80)
+
     # Remove inactive aliens
     aliens = [alien for alien in aliens if alien.active]
 
@@ -127,7 +135,8 @@ while running:
     spaceship.missiles = [missile for missile in spaceship.missiles if missile.active]
 
     # Draw the spaceship and the scoreboard
-    spaceship.draw(window)
+    if spaceship.active:
+        spaceship.draw(window)
     scoreboard.draw(window)
 
     pygame.display.update()

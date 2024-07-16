@@ -43,6 +43,8 @@ class Missile:
             self.rect.topleft = (self.x, self.y)
 
 
+import pygame
+
 class Explosion:
     def __init__(self, x, y):
         self.x = x
@@ -88,6 +90,7 @@ class Spaceship:
         self.speed = 5
         self.last_shot_time = 0  # Timestamp of the last shot
         self.shoot_delay = 1  # Delay in seconds
+        self.active = True
 
         # Grid-based shape of the spaceship
         self.shape = [
@@ -133,6 +136,6 @@ class Spaceship:
             self.last_shot_time = current_time  # Update the last shot time
 
     def hit(self):
-        self.explosion = Explosion(self.x, self.y)
-        return self.explosion
+        self.active = False
+        return Explosion(self.x, self.y)
     
